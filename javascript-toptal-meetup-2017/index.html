@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/black.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/css/zenburn.min.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown>
+                    <script type="text/template">
+                        # How to use JavaScript Transpilers
+
+                        by Radek Nováček
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## About Me
+                        <!-- TODO: finish this -->
+                        * Toptal developer
+                        * Full-stack (mostly Python &amp; Javascript)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## What's a transpiler
+                        <!-- TODO: image here maybe -->
+                        * it's a source-to-source compiler (preprocessor)
+                        * transpilation vs compilation
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Why transpile
+
+                        * browsers only speak Javascript
+                        * we want to use higher level language (Vala (to C), HipHop (PHP to C), ...)
+                        * migration to another version of language (e.g. Python 2 to Python 3)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Why I use transpilation
+
+                        * old JS (<= ES5) is ugly and lacks features
+                        * make Javascript to look (and feel) more like Python
+                        * support older browsers without extra effort
+                        * extra features like JSX
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## What can we transpile (in JS)
+
+                        * future version of JavaScript (ES2015+)
+                        * other JS variants (TypeScript, CoffeeScript, JSX, ...)
+                        * pretty much any language (see the [list](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS))
+                    </script>
+                </section>
+                <section>
+                    <h2>ECMAScript (JavaScript) versions</h2>
+                    <table style="font-size: smaller">
+                        <tr>
+                            <th>ECMAScript version</th>
+                            <th colspan="4">safe to use</th>
+                        </tr>
+                        <tr>
+                            <td>ES3</td>
+                            <td>IE 6 - 8</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>ES5</td>
+                            <td>IE 9</td>
+                            <td>Firefox 21</td>
+                            <td>Chrome 23</td>
+                        </tr>
+                        <tr>
+                            <td>ES2015 (ES6)</td>
+                            <td>Edge 13</td>
+                            <td>Firefox 45 ESR</td>
+                            <td>Chrome 49</td>
+                        </tr>
+                        <tr>
+                            <td>ES2016</td>
+                            <td></td>
+                            <td>Firefox 52</td>
+                            <td>Chrome 57</td>
+                        </tr>
+                    </table>
+                    <p>Babel can (with plugins) support IE8+<p>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## ES6 support in browsers
+
+                        ![compatibility table](compat-table.png "Logo Title Text 1")
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Interesting ES2015 features
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Arrow functions
+
+                        ```javascript
+                        [1, 2, 3].map(
+                            (num) => num * num
+                        ); // [1, 4, 9]
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Classes
+
+                        ```javascript
+                        class Foo {
+                            constructor() {
+                                document
+                                    .querySelector('#button')
+                                    .addEventListener('click', (e) => {
+                                        // this refers to instance of Foo class
+                                        this.show_alert();
+                                    });
+                            }
+                            show_alert() {
+                                alert('You clicked a button');
+                            }
+                        }
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Enhanced Object Literals
+
+                        ```javascript
+                        var obj = {
+                            // Shorthand for `handler: handler`
+                            handler,
+                            // Methods
+                            toString() {
+                                // Super calls
+                                return "d " + super.toString();
+                            },
+                            // Computed (dynamic) property names
+                            [ "prop_" + (() => 42)() ]: 42
+                        };
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Template Strings
+
+                        ```javascript
+                        const name = "Bob", time = "today";
+                        `Hello ${name}, how are you ${time}?`
+                        // 'Hello ' + name + ', how are you ' + time + '?'
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Destructuring
+
+                        ```javascript
+                        var list = [1, 2, 3];
+                        var [a, b, c] = list;
+                        // a === 1, b === 2, c === 3
+                        ```
+
+                        ```javascript
+                        function foo({key, value, count}) {
+                            // key === 1, value === 'hello', count === 5
+                        }
+                        var o = {
+                            key: 1,
+                            value: 'hello',
+                            count: 5
+                        }
+                        foo(o);
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Modules
+
+                        ```javascript
+                        // foo.js
+                        export default class Foo {
+
+                        }
+                        export const BAR = 100;
+                        ```
+
+                        ```javascript
+                        // other.js
+                        import Foo, { BAR } from './foo';
+                        ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## That's all
+
+                        ## Thanks for listening
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Sources
+
+                        * [JavaScript Transpilers: What They Are &amp; Why We Need Them](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them)
+                        * [Can I Use](http://caniuse.com/)
+                        * [ECMAScript Compatibility table](http://kangax.github.io/compat-table/)
+                    </script>
+                </section>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/lib/js/head.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                history: true,
+                dependencies: [
+                    {
+                        src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js',
+                        condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }
+                    },
+                    {
+                        src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.js',
+                        condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }
+                    },
+                    {
+                        src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.js',
+                        async: true,
+                        callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }
+                    },
+                ],
+            });
+        </script>
+    </body>
+</html>
